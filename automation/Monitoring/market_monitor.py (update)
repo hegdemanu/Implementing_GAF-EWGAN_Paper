@@ -1,0 +1,53 @@
+# 
+
+class MarketMonitor:
+    def __init__(self, api, update_interval=60):
+        # ... existing initialization ...
+        
+        # Add dashboard state
+        self.dashboard_state = DashboardState()
+    
+    def _process_alerts(self, alert: MarketAlert):
+        # Add alert to dashboard queue
+        self.dashboard_state.alert_queue.put({
+            'timestamp': alert.timestamp,
+            'symbol': alert.symbol,
+            'alert_type': alert.alert_type,
+            'severity': alert.severity,
+            'message': alert.message
+        })
+        
+        # Process through other handlers
+        for handler in self.alert_handlers:
+            try:
+                handler(alert)
+            except Exception as e:
+                self.logger.error(f"Alert handler failed: {str(e)}")
+    
+    def update_market_state(self, symbol: str, new_data: pd.DataFrame):
+        # Update dashboard market data
+        self.dashboard_state.market_data[symbol] = new_data
+        
+        # ... existing state update code ...
+
+# main.py (update)
+
+def main():
+    # ... existing initialization ...
+    
+    # Start dashboard
+    import subprocess
+    dashboard_process = subprocess.Popen(
+        ['streamlit', 'run', 'dashboard/app.py'],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    
+    try:
+        # Run monitoring and model pipeline
+        monitor.start_monitoring(symbols)
+        # ... rest of your code ...
+    
+    finally:
+        monitor.stop_monitoring()
+        dashboard_process.terminate()
