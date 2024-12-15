@@ -1,25 +1,36 @@
-
-
 alpha_vantage_key: "YOUR_API_KEY"
-symbols:
-  - "AAPL"
-  - "MSFT"
-  - "GOOGL"
-  - "AMZN"
-  - "FB"
 
-# Model parameters
-n_models: 10
-batch_size: 64
-base_epochs: 100
-meta_epochs: 50
-learning_rate: 0.0001
+monitoring:
+  update_interval: 60
+  thresholds:
+    price_change: 0.02
+    volume_spike: 2.0
+    volatility: 0.015
+    momentum: 0.05
+  alert_handlers:
+    - log
+    - slack
+    - email
+  symbols:
+    - AAPL
+    - MSFT
+    - GOOGL
+    - AMZN
 
-# Trading parameters
-initial_balance: 10000
-threshold: 0.05
+model:
+  train: true
+  n_models: 10
+  device: "cuda"
+  batch_size: 64
+  epochs: 100
+  symbols:
+    - AAPL
+    - MSFT
+    - GOOGL
+    - AMZN
+  save_path: "checkpoints/model.pt"
+  load_path: "checkpoints/model.pt"
 
-# Training parameters
-early_stopping_patience: 10
-checkpoint_dir: "checkpoints"
-results_dir: "results"
+evaluation:
+  enabled: true
+  initial_balance: 10000
