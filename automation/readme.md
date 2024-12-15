@@ -29,8 +29,14 @@ Extensible handler system
 To use this monitoring system:
 
 ##Initialize:
+```
 pythonCopymonitor = MarketMonitor(api, update_interval=60)
-Add alert handlers:
+```
+#Add alert handlers:
+```
 pythonCopymonitor.add_alert_handler(AlertHandlers.log_alert)
-Start monitoring:
+```
+#Start monitoring:
+```
 pythonCopymonitor.start_monitoring(["AAPL", "MSFT", "GOOGL"])
+```
